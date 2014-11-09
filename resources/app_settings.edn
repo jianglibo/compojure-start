@@ -1,0 +1,10 @@
+{:test {
+        :db-spec {
+                  :classname "org.hsqldb.jdbc.JDBCDriver"
+                  :subprotocol "hsqldb"
+                  :subname  "file:testdb/ttt"
+                  :user "aUserName"
+                  :password "123456"}
+
+        :db-schema "db_schema.edn"}
+ :product {}}
