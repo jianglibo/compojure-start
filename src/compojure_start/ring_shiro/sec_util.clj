@@ -232,7 +232,6 @@
                  (.setHashIterations const/PASSWORD_HASH_ITERATIONS))]
         (-> sessmgr (.setSessionDAO sdao))
         (doto smgr
-;          (.setRealm (WhatEverLoginRealm.))
           (.setRealm (doto
                        (proxy-realm (db-util/db-conn))
                        (.setName const/USER_REALM_NAME)

@@ -9,7 +9,7 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
 
-(app-settings/init "r_s_app_settings.edn")
+(app-settings/init)
 (db-util/init)
 (sec-util/init)
 
@@ -18,5 +18,7 @@
   (route/not-found "Not Found"))
 
 (def app
-  (wrap-defaults (wrap-shiro app-routes) site-defaults))
+  (wrap-defaults (wrap-shiro app-routes)
+                 (-> (dissoc site-defaults :session)
+                     (assoc :static {:resources "public"}))))
 
