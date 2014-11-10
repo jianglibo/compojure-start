@@ -5,7 +5,7 @@
              [app-settings :as app-settings]]
             [compojure-start.ring-shiro.sec-util :as sec-util]
             [compojure-start.db-fixtures :as db-fixtures]
-            [compojure-start.ring-shiro.core :refer [wrap-shiro-for-test build-subject]])
+            [compojure-start.ring-shiro.core :as ring-shiro-core])
   (:import (com.m3958.lib.ringshiro StateOb)
            (com.m3958.lib.ringshiro AcallableExecutor)))
 
@@ -53,9 +53,9 @@
 
 ;they are from difference thread, so will not same.
 (deftest sub-eq
-  (is (not (= (build-subject {}) (sec-util/get-subject))))
+  (is (not (= (ring-shiro-core/build-subject {}) (sec-util/get-subject))))
   (is (= (sec-util/get-subject) (sec-util/get-subject)))
-  (is (not (= (build-subject {}) (build-subject {})))))
+  (is (not (= (ring-shiro-core/build-subject {}) (ring-shiro-core/build-subject {})))))
 
 
 ;when comming there is no session, handler do nothing about session, when leaving, it's no session too.
@@ -64,7 +64,7 @@
   {})
 
 (defn- simple-app []
-  (wrap-shiro-for-test simple-handler))
+  (ring-shiro-core/wrap-shiro-test simple-handler))
 
 (deftest simple-request
   (is (= {} (dissoc ((simple-app) {}) :subject))))
@@ -78,7 +78,7 @@
   {})
 
 (defn- csession-app []
-  (wrap-shiro-for-test csession-handler))
+  (ring-shiro-core/wrap-shiro-test csession-handler))
 
 (deftest cssesion-request
   (binding [*shiro-response* ((csession-app) (sample-request))]
