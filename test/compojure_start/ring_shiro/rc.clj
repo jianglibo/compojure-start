@@ -4,5 +4,5 @@
 (def v 1)
 
 (defn reset-def
-  [v]
-  (def v v))
+  [x]
+  (def v x))

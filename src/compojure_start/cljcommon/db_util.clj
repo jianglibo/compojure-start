@@ -97,3 +97,14 @@
 
 ;(jdbc/execute! db-spec ["UPDATE table SET col1 = NOW() WHERE id = ?" 77])
 ;(jdbc/db-do-commands db-spec "CREATE INDEX name_ix ON fruit ( name )")
+;http://stackoverflow.com/questions/192220/what-is-the-most-efficient-elegant-way-to-parse-a-flat-table-into-a-tree/
+;SELECT f.*
+;FROM FlatTable f
+;  JOIN ClosureTable a ON (f.id = a.descendant_id)
+;WHERE a.ancestor_id = 1;
+
+;SELECT f.*
+;FROM FlatTable f
+;  JOIN ClosureTable a ON (f.id = a.descendant_id)
+;WHERE a.ancestor_id = 1
+;  AND path_length = 1;

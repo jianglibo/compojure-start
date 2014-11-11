@@ -31,43 +31,40 @@
     )"
 
     "CREATE TABLE group4u_user (
-      group4u_id INTEGER NOT NULL,
-      user_id INTEGER NOT NULL,
-      CONSTRAINT fk_gu_group4u FOREIGN KEY (group4u_id) REFERENCES group4u (id),
-      CONSTRAINT fk_gu_user FOREIGN KEY (user_id) REFERENCES user (id),
-      CONSTRAINT unique_g_u UNIQUE (group4u_id, user_id)
+      group4u_id INTEGER NOT NULL REFERENCES group4u (id),
+      user_id INTEGER NOT NULL REFERENCES user (id),
+      PRIMARY KEY (group4u_id, user_id)
+    )"
+
+    "CREATE TABLE gpath (
+      ancestor_id INTEGER NOT NULL REFERENCES group4u (id),
+      descendant_id INTEGER NOT NULL REFERENCES group4u (id),
+      path_level INTEGER NOT NULL,
+      PRIMARY KEY (ancestor_id, descendant_id)
     )"
 
     "CREATE TABLE role_user (
-      role_id INTEGER NOT NULL,
-      user_id INTEGER NOT NULL,
-      CONSTRAINT fk_ru_role FOREIGN KEY (role_id) REFERENCES role (id),
-      CONSTRAINT fk_ru_user FOREIGN KEY (user_id) REFERENCES user (id),
-      CONSTRAINT unique_r_u UNIQUE (role_id, user_id)
+      role_id INTEGER NOT NULL REFERENCES role (id),
+      user_id INTEGER NOT NULL REFERENCES user (id),
+      PRIMARY KEY (role_id, user_id)
     )"
 
     "CREATE TABLE group4u_role (
-      role_id INTEGER NOT NULL,
-      group4u_id INTEGER NOT NULL,
-      CONSTRAINT fk_gr_role FOREIGN KEY (role_id) REFERENCES role (id),
-      CONSTRAINT fk_gr_group4u FOREIGN KEY (group4u_id) REFERENCES group4u (id),
-      CONSTRAINT unique_g_r UNIQUE (role_id, group4u_id)
+      role_id INTEGER NOT NULL REFERENCES role (id),
+      group4u_id INTEGER NOT NULL REFERENCES group4u (id),
+      PRIMARY KEY (role_id, group4u_id)
     )"
 
     "CREATE TABLE permission_role (
-      role_id INTEGER NOT NULL,
-      permission_id INTEGER NOT NULL,
-      CONSTRAINT fk_pr_role FOREIGN KEY (role_id) REFERENCES role (id),
-      CONSTRAINT fk_pr_permission FOREIGN KEY (permission_id) REFERENCES permission (id),
-      CONSTRAINT unique_p_r UNIQUE (role_id, permission_id)
+      role_id INTEGER NOT NULL REFERENCES role (id),
+      permission_id INTEGER NOT NULL REFERENCES permission (id),
+      PRIMARY KEY (role_id, permission_id)
     )"
 
     "CREATE TABLE permission_user (
-    permission_id INTEGER NOT NULL,
-    user_id INTEGER NOT NULL,
-    CONSTRAINT fk_pu_permmission FOREIGN KEY (permission_id) REFERENCES permission (id),
-    CONSTRAINT fk_pu_user FOREIGN KEY (user_id) REFERENCES user (id),
-    CONSTRAINT unique_p_u UNIQUE (permission_id, user_id)
+      permission_id INTEGER NOT NULL REFERENCES permission (id),
+      user_id INTEGER NOT NULL REFERENCES user (id),
+      PRIMARY KEY (permission_id, user_id)
     )"
     ]
 
@@ -76,6 +73,7 @@
     "DROP TABLE IF EXISTS role_user RESTRICT"
     "DROP TABLE IF EXISTS group4u_role RESTRICT"
     "DROP TABLE IF EXISTS group4u_user RESTRICT"
+    "DROP TABLE IF EXISTS gpath RESTRICT"
     "DROP TABLE IF EXISTS permission_role RESTRICT"
     "DROP TABLE IF EXISTS permission_user RESTRICT"
     "DROP TABLE IF EXISTS user RESTRICT"

@@ -20,6 +20,7 @@
                                    (let [w 1
                                         x y]
                                    z)) subst))
+
 (def afunc (eval (gf '[z (inc w)])))
 
 (deftest tmp-func
@@ -28,12 +29,12 @@
 
 
 (deftest defdef
+  (rc/reset-def 1)
   (is (= 1 rc/v))
   (rc/reset-def 5)
   (is (= 5 rc/v))
   (rc/reset-def 6)
   (is (= 6 rc/v)))
 
-(fn [x] x)
 
 (run-tests)
