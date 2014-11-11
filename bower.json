@@ -11,7 +11,7 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "resources/public/components",
+    "bower_components",
     "test",
     "tests"
   ],

@@ -13,4 +13,4 @@ pom.xml.asc
 
 .project
 .classpath
-/resources/public/components
+/bower_components
