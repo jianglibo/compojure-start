@@ -25,6 +25,9 @@
 
 (use-fixtures :once fixture)
 
+(deftest group4u-tree
+  (db-fixtures/create-group-tree)
+  (db-fixtures/drop-group-tree))
 
 (deftest schema-equal
   (is (= (count (:create-tables-sql (app-settings/get-db-schema)))
@@ -43,8 +46,7 @@
 (deftest create-user
   "create a new user, new created user must has password_salt."
   (let [dbres (sec-db/create-user  db-fixtures/userh1)
-        uidkey (-> dbres first keys first)
-        uid (uidkey (first dbres))
+        uid (first dbres)
         userh (sec-db/find-by :user :id uid)]
     (is uid "user id should return.")
 ;    (println userh)

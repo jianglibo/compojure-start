@@ -48,7 +48,8 @@
          rawpwd (pwdkey userh)
          [saltedpwd salt] (get-salted-pair rawpwd)
          userh (-> userh (assoc pwdkey saltedpwd) (assoc saltkey salt))]
-     (j/insert! db-conn :user userh))))
+     (map :id
+          (j/insert! db-conn :user userh)))))
 
 (defn drop-user
   ([user-id]
@@ -69,11 +70,22 @@
      (j/delete! t-con :group4u_role ["group4u_id = ?" group4u-id])
      (j/delete! t-con :group4u ["id = ?" group4u-id]))))
 
+(defn drop-role
+  ([role-id]
+   (drop-role (db-util/db-conn) role-id))
+  ([conn role-id]
+   (j/with-db-transaction [t-con conn]
+     (j/delete! t-con :role_user ["role_id = ?" role-id])
+     (j/delete! t-con :permission_role ["role_id = ?" role-id])
+     (j/delete! t-con :group4u_role ["role_id = ?" role-id])
+     (j/delete! t-con :role ["id = ?" role-id]))))
+
 (defn create-role
   ([rn]
    (create-role (db-util/db-conn) rn))
   ([db-conn rn]
-   (j/insert! db-conn :role {:name rn})))
+   (map :id
+        (j/insert! db-conn :role {:name rn}))))
 
 (defn get-gpath
   [parent-id]
@@ -88,7 +100,8 @@
   ([gn]
    (create-group4u gn nil))
   ([gn parent-id]
-   (j/insert! (db-util/db-conn) :group4u {:name gn :parent_id parent-id :gpath (get-gpath parent-id)})))
+   (map :id
+        (j/insert! (db-util/db-conn) :group4u {:name gn :parent_id parent-id :gpath (get-gpath parent-id)}))))
 
 (defn get-children
   [table parent-id]
@@ -101,7 +114,8 @@
   ([pms]
    (create-permission (db-util/db-conn) pms))
   ([db-conn pms]
-   (j/insert! db-conn :permission {:pms pms})))
+   (map :id
+        (j/insert! db-conn :permission {:pms pms}))))
 
 (defn role->user
   ([role-id user-id]

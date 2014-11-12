@@ -21,6 +21,10 @@
 
 (use-fixtures :each fixture)
 
+(deftest dstype
+  (is (coll? (db-util/db-conn)))
+  (is (:datasource (db-util/db-conn))))
+
 (defn- insert-user
   ([userh]
      (j/insert! (db-util/db-conn) :user userh))

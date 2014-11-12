@@ -24,7 +24,7 @@
 
 (re-find #"[\d|.]+\s+msecs"
          (with-out-str
-           (time (doseq [u (ramuserhs 1000)]
+           (time (doseq [u (take 1000 (repeatedly ramuserh))]
                    (:username u)))))
 
 (defn create-usera
@@ -42,6 +42,21 @@
 (defn drop-groupa
   []
   (sec-db/drop-group4u (:id (sec-db/find-by :group4u :name groupa))))
+
+(defn create-group-tree
+  []
+  (let [a (sec-db/create-group4u "a")
+        b (sec-db/create-group4u "b" (first a))
+        c (sec-db/create-group4u "c" (first b))
+        d (sec-db/create-group4u "d" (first c))
+        e (sec-db/create-group4u "e" (first d))]
+    (str "created" a)))
+
+(defn drop-group-tree
+  []
+  (let [ids (map #(:id (sec-db/find-by :group4u :name %)) '("a" "b" "c" "d" "e"))]
+    (doseq [id ids]
+      (sec-db/drop-group4u id))))
 
 (defn create-sample-users [n]
   (let [uhs (take n (repeatedly ramuserh))]
