@@ -34,10 +34,39 @@
     (is (= a1 (:parent_id b)))
     (is (= (str "." a1 ".") (:gpath b)))
     (is (= b1 (:parent_id c)))
-    (is (= (str "." (clojure.string/join "." [a1 b1]) ".") (:gpath c)))
-    )
-
+    (is (= (str "." (clojure.string/join "." [a1 b1]) ".") (:gpath c))))
   (db-fixtures/drop-group-tree))
+
+
+(deftest group4u-tree1
+  (let [ids (db-fixtures/create-group-tree)
+        [a b c d e] ids]
+  (is (thrown-with-msg?
+       Throwable
+       #"10405"
+       (sec-db/drop-group4u d)))
+  (db-fixtures/drop-group-tree)))
+
+(deftest group4u-get-child
+  (let [ids (db-fixtures/create-group-tree)
+        [a b c d e] ids
+        tops (sec-db/get-children :group4u nil)
+        acs (sec-db/get-children :group4u a)]
+    (is (= 1 (count tops)))
+    (is (= a (:id (first tops))))
+    (is (= 1 (count acs)))
+    (is (= b (:id (first acs))))
+  (db-fixtures/drop-group-tree)))
+
+(deftest group4u-get-descendants
+  (let [ids (db-fixtures/create-group-tree)
+        [a b c d e] ids
+        tops (sec-db/get-descendants :group4u nil)
+        acs (sec-db/get-descendants :group4u a)]
+    (is (= 0 (count tops)))
+    (is (= 4 (count acs)))
+  (db-fixtures/drop-group-tree)))
+
 
 (deftest schema-equal
   (is (= (count (:create-tables-sql (app-settings/get-db-schema)))

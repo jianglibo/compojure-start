@@ -11,6 +11,14 @@
   []
   (throw (Throwable. "10404")))
 
+(defn- format-from-table
+  [tn]
+  (let [tnstr (if (keyword? tn)
+                (name tn)
+                tn)]
+    (format "SELECT * FROM %s " tnstr)))
+
+
 (defn find-by
   "Find user by one unique field."
   [table fkey fval]
@@ -65,10 +73,12 @@
   ([group4u-id]
    (drop-group4u (db-util/db-conn) group4u-id))
   ([conn group4u-id]
-   (j/with-db-transaction [t-con conn]
-     (j/delete! t-con :group4u_user ["group4u_id = ?" group4u-id])
-     (j/delete! t-con :group4u_role ["group4u_id = ?" group4u-id])
-     (j/delete! t-con :group4u ["id = ?" group4u-id]))))
+   (try
+     (j/with-db-transaction [t-con conn]
+       (j/delete! t-con :group4u_user ["group4u_id = ?" group4u-id])
+       (j/delete! t-con :group4u_role ["group4u_id = ?" group4u-id])
+       (j/delete! t-con :group4u ["id = ?" group4u-id]))
+     (catch Throwable _ (throw (Throwable. "10405"))))))
 
 (defn drop-role
   ([role-id]
@@ -97,17 +107,23 @@
     nil))
 
 (defn create-group4u
-  ([gn]
-   (create-group4u gn nil))
   ([gn parent-id]
+   (create-group4u (db-util/db-conn) gn parent-id))
+  ([conn gn parent-id]
    (map :id
-        (j/insert! (db-util/db-conn) :group4u {:name gn :parent_id parent-id :gpath (get-gpath parent-id)}))))
+        (j/insert! conn :group4u {:name gn :parent_id parent-id :gpath (get-gpath parent-id)}))))
 
 (defn get-children
   [table parent-id]
   (if parent-id
     (j/query (db-util/db-conn) [(str "SELECT * FROM " (name table) " WHERE parent_id = ?") parent-id])
     (j/query (db-util/db-conn) [(str "SELECT * FROM " (name table) " WHERE parent_id IS NULL")])))
+
+(defn get-descendants
+  [table ancestor-id]
+  (if-not ancestor-id
+    ()
+    (j/query (db-util/db-conn) [(str "SELECT * FROM " (name table) "WHERE gpath LIKE ?") (str "%." ancestor-id ".%")])))
 
 ;newsletter:edit:13
 (defn create-permission
