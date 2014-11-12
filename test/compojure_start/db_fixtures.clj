@@ -13,6 +13,8 @@
 (def rolea "rolea")
 (def groupa "groupa")
 
+(def group-tree '[b [c d]])
+
 (defn- ramuserh []
   {:username (clj-util/random-str 8)
    :nickname "nn"

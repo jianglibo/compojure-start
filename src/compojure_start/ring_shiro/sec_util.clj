@@ -68,11 +68,15 @@
          userh (-> userh (assoc pwdkey saltedpwd) (assoc saltkey salt))]
      (j/insert! db-conn :user userh))))
 
+(defn throw-404
+  []
+  (throw (Throwable. "10404")))
+
 (defn find-by
   "Find user by one unique field."
   [table fkey fval]
   (if-not (contains? (db-unique-keys table) fkey)
-    (throw (Throwable. "10404")))
+    (throw-404))
 
   (let [sql (str "SELECT * FROM " (name table) " WHERE " (name fkey) " = ?")
         rs (j/query (db-util/db-conn) [sql fval])]
@@ -86,11 +90,26 @@
   ([db-conn rn]
    (j/insert! db-conn :role {:name rn})))
 
+(defn get-gpath
+  [parent-id]
+  (if parent-id
+    (let [parent (find-by :group4u :id parent-id)]
+      (if-not parent
+        (throw-404))
+      (str (or (:gpath parent) ".") (:id parent) "."))
+    nil))
+
 (defn create-group4u
   ([gn]
-   (create-group4u (db-util/db-conn) gn))
-  ([db-conn gn]
-   (j/insert! db-conn :group4u {:name gn})))
+   (create-group4u gn nil))
+  ([gn parent-id]
+   (j/insert! (db-util/db-conn) :group4u {:name gn :parent_id parent-id :gpath (get-gpath parent-id)})))
+
+(defn get-children
+  [table parent-id]
+  (if parent-id
+    (j/query (db-util/db-conn) [(str "SELECT * FROM " (name table) " WHERE parent_id = ?") parent-id])
+    (j/query (db-util/db-conn) [(str "SELECT * FROM " (name table) " WHERE parent_id IS NULL")])))
 
 ;newsletter:edit:13
 (defn create-permission

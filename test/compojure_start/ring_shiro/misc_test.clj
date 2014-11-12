@@ -1,5 +1,6 @@
 (ns compojure-start.ring-shiro.core-test
   (:require [clojure.test :refer :all]
+            [clojure.zip :as zip]
             [compojure-start.ring-shiro.sec-util :as sec-util] :reload-all)
   (:import (com.m3958.lib.ringshiro StateOb)
            (com.m3958.lib.ringshiro AcallableExecutor)))
@@ -35,3 +36,13 @@
 
 (def xrel #{ {:name "A"} {:name "B"} {:name "C"} {:name "D"}})
 (def yrel #{ {:action "a"} {:action "b"} {:action "c"} {:action "d"}})
+
+;(def dz (zip/vector-zip '[a [b [c d [e]]]]))
+
+;(loop [loc dz]
+;  (if (zip/end? loc)
+;    (zip/root loc)
+;    (recur
+;     (do
+;       (println (zip/path loc))
+;       (zip/next loc)))))
