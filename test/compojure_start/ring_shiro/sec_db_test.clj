@@ -26,7 +26,17 @@
 (use-fixtures :once fixture)
 
 (deftest group4u-tree
-  (db-fixtures/create-group-tree)
+  (let [ids (db-fixtures/create-group-tree)
+        [a1 b1 c1 d1 e1] ids
+        [a b c d e] (map #(sec-db/find-by :group4u :id %) ids)]
+    (is (nil? (:parent_id a)))
+    (is (nil? (:gpath a)))
+    (is (= a1 (:parent_id b)))
+    (is (= (str "." a1 ".") (:gpath b)))
+    (is (= b1 (:parent_id c)))
+    (is (= (str "." (clojure.string/join "." [a1 b1]) ".") (:gpath c)))
+    )
+
   (db-fixtures/drop-group-tree))
 
 (deftest schema-equal

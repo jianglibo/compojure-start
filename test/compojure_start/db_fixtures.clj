@@ -50,11 +50,13 @@
         c (sec-db/create-group4u "c" (first b))
         d (sec-db/create-group4u "d" (first c))
         e (sec-db/create-group4u "e" (first d))]
-    (str "created" a)))
+    (map first [a b c d e])))
 
 (defn drop-group-tree
   []
-  (let [ids (map #(:id (sec-db/find-by :group4u :name %)) '("a" "b" "c" "d" "e"))]
+  (let [ids (reverse (map
+             #(:id (sec-db/find-by :group4u :name %))
+             '("a" "b" "c" "d" "e")))]
     (doseq [id ids]
       (sec-db/drop-group4u id))))
 
