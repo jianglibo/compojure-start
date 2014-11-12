@@ -2,7 +2,7 @@
   (:require [compojure-start.cljcommon
              [clj-util :as clj-util]
              [db-util :as db-util]]
-            [compojure-start.ring-shiro.sec-util :as sec-util]
+            [compojure-start.ring-shiro.sec-db :as sec-db]
             [clojure.set :as cset]
             [clojure.java.jdbc :as j] :reload-all))
 
@@ -22,28 +22,41 @@
    :password "pwd"
    })
 
-(defn- ramuserhs [n]
-  (conj (take n (repeatedly ramuserh)) userh))
-
 (re-find #"[\d|.]+\s+msecs"
          (with-out-str
            (time (doseq [u (ramuserhs 1000)]
                    (:username u)))))
 
+(defn create-usera
+  []
+  (sec-db/create-user userh))
+
+(defn drop-usera
+  []
+  (sec-db/drop-user (:id (sec-db/find-by :user :username "un"))))
+
+(defn create-groupa
+  []
+  (sec-db/create-group4u groupa))
+
+(defn drop-groupa
+  []
+  (sec-db/drop-group4u (:id (sec-db/find-by :group4u :name groupa))))
+
 (defn create-sample-users [n]
-  (let [uhs (ramuserhs n)]
+  (let [uhs (take n (repeatedly ramuserh))]
     (doseq [uh uhs]
-      (sec-util/create-user uh))))
+      (sec-db/create-user uh))))
 
 (defn create-sample-roles [n]
-  (let [rns (conj (take n (repeatedly (partial clj-util/random-str 8))) rolea)]
+  (let [rns (take n (repeatedly (partial clj-util/random-str 8)))]
     (doseq [rn rns]
-      (sec-util/create-role rn))))
+      (sec-db/create-role rn))))
 
 (defn create-sample-group4us [n]
-  (let [gns (conj (take n (repeatedly (partial clj-util/random-str 8))) groupa)]
+  (let [gns (take n (repeatedly (partial clj-util/random-str 8)))]
     (doseq [gn gns]
-      (sec-util/create-group4u gn))))
+      (sec-db/create-group4u gn))))
 
 (defn- create-hash-set
   [kn values]
@@ -52,18 +65,9 @@
 (def onames ["Article" "Section" "MailFolder"])
 (def actions ["create" "read" "update" "delete"])
 
-;(defn create-sample-permissions
-;  [n]
-;  (let [onamehs (create-hash-set :oname onames)
-;        actionhs (create-hash-set :action actions)
-;        idhs (create-hash-set :id (range n))
-;        permhs (reduce cset/join [onamehs actionhs idhs])]
-;    (doseq [ph permhs])
-;    ))
-
 (defn create-sample-permissions
   [n]
   (doseq [pmstr
           (for [oname onames action actions id (range n)]
             (str oname ":" action ":" id))]
-    (sec-util/create-permission pmstr)))
+    (sec-db/create-permission pmstr)))
