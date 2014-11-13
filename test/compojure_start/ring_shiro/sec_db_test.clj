@@ -34,8 +34,7 @@
     (is (= a1 (:parent_id b)))
     (is (= (str "." a1 ".") (:gpath b)))
     (is (= b1 (:parent_id c)))
-    (is (= (str "." (clojure.string/join "." [a1 b1]) ".") (:gpath c)))
-    )
+    (is (= (str "." (clojure.string/join "." [a1 b1]) ".") (:gpath c))))
 
   (db-fixtures/drop-group-tree))
 
