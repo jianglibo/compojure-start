@@ -8,17 +8,16 @@
 
 (def bower "bower_components")
 
-(def dst (io/file "resources" "public" "js"))
+(def dst (io/file "resources" "public" "js" "libs"))
 
-(def file-to-copy '[
-                     [ember ember.min.js]
-                     [ember ember.js]
-                     [ember-data ember-data.min.js]
-                     [ember-data ember-data.js]
-                     [handlebars handlebars.min.js]
-                     [jquery dist jquery.min.js]
-                     [jquery dist jquery.min.map]
-                    ])
+(def file-to-copy '[[ember ember.min.js]
+                    [ember ember.js]
+                    [ember-data ember-data.min.js]
+                    [ember-data ember-data.js]
+                    [handlebars handlebars.min.js]
+                    [jquery dist jquery.min.js]
+                    [jquery dist jquery.min.map]
+                    [pure pure-min.css]])
 
 (defn file-pairs
   []

@@ -7,23 +7,30 @@
 </head>
 <body>
 
+
+<header>
+  <h1>Igor's Blog</h1>
+</header>
+
+<script type="text/x-handlebars">
     <h1>{{appName}}</h1>
 
+  {{outlet}}
     <h2>{{title}}</h2>
+</script>
 
+<footer>
+  &copy;2013 Igor's Publishing, Inc.
+</footer>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/handlebars.min.js"></script>
-    <script src="js/ember.js"></script>
-    <script src="js/ember-data.js"></script>
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/libs/handlebars.min.js"></script>
+    <script src="js/libs/ember.js"></script>
 
 
   <script type="text/javascript">
     var App = Ember.Application.create();
 
-    App.Store = DS.Store.extend({
-      adapter: DS.RESTAdapter
-    })
     App.ApplicationRoute = Ember.Route.extend({
       setupController: function(controller) {
     // `controller` is the instance of ApplicationController

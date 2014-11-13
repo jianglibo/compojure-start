@@ -11,22 +11,23 @@
   []
   (throw (Throwable. "10404")))
 
-(defn- format-from-table
-  [tn]
-  (let [tnstr (if (keyword? tn)
-                (name tn)
-                tn)]
-    (format "SELECT * FROM %s " tnstr)))
+(defn- format-query
+  ([table where]
+   (let [tnstr (if (keyword? table)
+                 (name table)
+                 table)]
+    (format "SELECT * FROM %s WHERE %s" tnstr where))))
 
+(defn- format-find-by
+  [table fkey]
+  (if-not (contains? (const/db-unique-keys table) fkey)
+    (throw-404))
+  (str "SELECT * FROM " (name table) " WHERE " (name fkey) " = ?"))
 
 (defn find-by
   "Find user by one unique field."
   [table fkey fval]
-  (if-not (contains? (const/db-unique-keys table) fkey)
-    (throw-404))
-
-  (let [sql (str "SELECT * FROM " (name table) " WHERE " (name fkey) " = ?")
-        rs (j/query (db-util/db-conn) [sql fval])]
+  (let [rs (j/query (db-util/db-conn) [(format-find-by table fkey) fval])]
     (if (empty? rs)
       nil
       (first rs))))
@@ -116,14 +117,14 @@
 (defn get-children
   [table parent-id]
   (if parent-id
-    (j/query (db-util/db-conn) [(str "SELECT * FROM " (name table) " WHERE parent_id = ?") parent-id])
-    (j/query (db-util/db-conn) [(str "SELECT * FROM " (name table) " WHERE parent_id IS NULL")])))
+    (j/query (db-util/db-conn) [(format-query table "parent_id = ?") parent-id])
+    (j/query (db-util/db-conn) [(format-query table "parent_id IS NULL")])))
 
 (defn get-descendants
   [table ancestor-id]
   (if-not ancestor-id
     ()
-    (j/query (db-util/db-conn) [(str "SELECT * FROM " (name table) "WHERE gpath LIKE ?") (str "%." ancestor-id ".%")])))
+    (j/query (db-util/db-conn) [(format-query table "gpath LIKE ?") (str "%." ancestor-id ".%")])))
 
 ;newsletter:edit:13
 (defn create-permission

@@ -1,1 +1,2 @@
 http://www.ember-cli.com/
+lein ring server-headless

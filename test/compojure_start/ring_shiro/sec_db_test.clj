@@ -52,8 +52,9 @@
         [a b c d e] ids
         tops (sec-db/get-children :group4u nil)
         acs (sec-db/get-children :group4u a)]
-    (is (= 1 (count tops)))
-    (is (= a (:id (first tops))))
+    ;plus pre added 5 samples.
+    (is (= 6 (count tops)))
+    (is (= 1 (count (filter #(= (:id %) a) tops))))
     (is (= 1 (count acs)))
     (is (= b (:id (first acs))))
   (db-fixtures/drop-group-tree)))

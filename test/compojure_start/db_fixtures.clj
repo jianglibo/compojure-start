@@ -37,7 +37,7 @@
 
 (defn create-groupa
   []
-  (sec-db/create-group4u groupa))
+  (sec-db/create-group4u groupa nil))
 
 (defn drop-groupa
   []
@@ -45,7 +45,7 @@
 
 (defn create-group-tree
   []
-  (let [a (sec-db/create-group4u "a")
+  (let [a (sec-db/create-group4u "a" nil)
         b (sec-db/create-group4u "b" (first a))
         c (sec-db/create-group4u "c" (first b))
         d (sec-db/create-group4u "d" (first c))
@@ -73,7 +73,7 @@
 (defn create-sample-group4us [n]
   (let [gns (take n (repeatedly (partial clj-util/random-str 8)))]
     (doseq [gn gns]
-      (sec-db/create-group4u gn))))
+      (sec-db/create-group4u gn nil))))
 
 (defn- create-hash-set
   [kn values]
