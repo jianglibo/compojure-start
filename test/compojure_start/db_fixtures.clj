@@ -3,6 +3,7 @@
              [clj-util :as clj-util]
              [db-util :as db-util]]
             [compojure-start.ring-shiro.sec-db :as sec-db]
+            [clojure.zip :as z]
             [clojure.set :as cset]
             [clojure.java.jdbc :as j] :reload-all))
 
@@ -88,3 +89,97 @@
           (for [oname onames action actions id (range n)]
             (str oname ":" action ":" id))]
     (sec-db/create-permission pmstr)))
+
+(def node-number (ref 1))
+
+(map (fn [_] {:id (dosync (alter node-number inc)) :parent_id 5}) (range 3))
+
+(z/zipper (fn [nd] (< @node-number 100))
+          (fn [nd] (map
+                    (fn [_] {:id (dosync (alter node-number inc)) :parent_id (:id nd)})
+                    (range 3)))
+          (fn [nd chs] chs)
+          [{:id 0 :parent_id nil}])
+
+(defn node-value
+  [loc]
+  (first (z/node loc)))
+
+(defn make-node [loc]
+  (z/append-child loc (z/make-node loc (z/node loc) [])))
+
+(defn make-nodes [loc brh]
+;  (count (take brh (iterate make-node loc))))
+  (last (take brh (iterate make-node loc))))
+
+(defn create-tree
+  [total brh]
+    (let [loc (z/vector-zip [])]
+      (-> (z/append-child loc {:id 0 :parent_id nil})
+          (make-nodes brh))))
+
+(create-tree 100 5)
+
+(def inc-start (ref 0))
+
+(defn get-next []
+  (dosync (alter inc-start inc)))
+
+(defmacro bcf
+  [n]
+  (vec (map (fn [_] 'x) (range n)))
+  )
+
+(macroexpand '(bcf 5))
+(let [x 6]
+  (bcf 5))
+
+(defmacro pointless [n] n)
+
+(pointless (+ 3 5))
+
+;(defmacro build-children-m
+;  [n]
+;  (let [vns (map #(str "l" %) (range (- n 1)))
+;        vns2 (map #(str "l" %) (drop 1 (range n)))
+;        c '(flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l1))]
+;    `(let ~@(vec (map (fn [x y] [x c y] ) vns vns2))
+;       (vec vns2))))
+
+(defmacro build-children-m
+  [n]
+  (let [vns (map #(symbol (str "l" %)) (range (- n 1)))
+        vns2 (map #(symbol (str "l" %)) (drop 1 (range n)))
+        c (map
+           (fn [s] (if (= 9999 s) n s))
+           '(flatten (map (fn [nd] (take 9999 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) [1])))]
+    (println c)
+
+        `(let ~(vec (reduce concat [] (map (fn [x y] [x c y]) vns vns2)))
+           ~(vec vns2))
+       ))
+
+(macroexpand '(build-children-m 5))
+
+
+(defn- build-children
+  [l1]
+  (let [l2 (flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l1))
+        l3 (flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l2))
+        l4 (flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l3))
+        l5 (flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l4))]
+    [l2 l3 l4 l5]))
+
+(defn tree-items
+  []
+  (let [l0 (take 10 (map (fn [id] {:id id :parent_id nil}) (repeatedly get-next)))
+        l1 (take 10 (map (fn [id pnd] {:id id :parent_id (:id pnd)}) (repeatedly get-next) l0))
+        ls (build-children l1)]
+    (flatten [l0 l1 ls])))
+
+(with-out-str
+  (time (count (tree-items))))
+
+
+
+

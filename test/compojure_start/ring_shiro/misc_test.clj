@@ -52,4 +52,27 @@
     (is (= 1 a))
     (is (= [2 3] b))))
 
+(def for-count (ref 0))
+
+(defn for-lazy
+  []
+  (for [x [1 2 3] y [4 5 6] z [7 8 9]]
+    (do
+      (dosync (alter for-count inc))
+      (* x y z))))
+
+;if you touch seq in for, then touch all item in that seq.
+(deftest for-lazy?
+  (dosync (ref-set for-count 0))
+  (is (= 5 (count (take 5 (for-lazy)))))
+  (is (= 6 @for-count))
+  (dosync (ref-set for-count 0))
+  (is (= 10 (count (take 10 (for-lazy)))))
+  (is (= 12 @for-count))
+  (dosync (ref-set for-count 0))
+  (is (= 9 (count (take 9 (for-lazy)))))
+  (is (= 9 @for-count))
+  )
+
+
 (run-tests)
