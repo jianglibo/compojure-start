@@ -5,6 +5,7 @@
             [compojure-start.ring-shiro.sec-db :as sec-db]
             [clojure.zip :as z]
             [clojure.set :as cset]
+            [clojure.template :as template]
             [clojure.java.jdbc :as j] :reload-all))
 
 
@@ -138,48 +139,54 @@
 
 (pointless (+ 3 5))
 
-;(defmacro build-children-m
-;  [n]
-;  (let [vns (map #(str "l" %) (range (- n 1)))
-;        vns2 (map #(str "l" %) (drop 1 (range n)))
-;        c '(flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l1))]
-;    `(let ~@(vec (map (fn [x y] [x c y] ) vns vns2))
-;       (vec vns2))))
+(defn- create-children
+  [parentv n]
+  (flatten (map
+            (fn [pnd]
+              (take n
+                    (map
+                     (fn [id] {:id id, :parent_id (:id pnd)})
+                     (repeatedly get-next))))
+            parentv)))
 
-(defmacro build-children-m
-  [n]
-  (let [vns (map #(symbol (str "l" %)) (range (- n 1)))
-        vns2 (map #(symbol (str "l" %)) (drop 1 (range n)))
-        c (map
-           (fn [s] (if (= 9999 s) n s))
-           '(flatten (map (fn [nd] (take 9999 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) [1])))]
-    (println c)
+(defmacro tree-items
+  [lev n]
+  (let [llls (let [levs (map #(symbol (str "i" %)) (rest (range lev)))
+                   levs1 (map #(symbol (str "i" %)) (drop-last (range lev)))
+                   ctpl '(create-children x y)
+                   tpl-seq (map #(vector %1 (template/apply-template '[x y] ctpl [%2 n])) levs levs1)]
+               (vec (apply concat tpl-seq)))
+        lresult (vec (map #(symbol (str "i" %)) (rest (range lev))))
+        scaffold (template/apply-template '[x llls lresult]
+                                          '(let [i0 (take x (map #(assoc {:parent_id nil} :id %) (repeatedly get-next)))
+                                                 levels (let llls lresult)]
+                                             (flatten [i0 levels]))
+                                          [n llls lresult])]
+    scaffold))
 
-        `(let ~(vec (reduce concat [] (map (fn [x y] [x c y]) vns vns2)))
-           ~(vec vns2))
-       ))
+(macroexpand '(tree-items 5 10))
 
-(macroexpand '(build-children-m 5))
+(defn tree-items-i
+  [lev n]
+  (let [lev (dec lev)
+        rootn (take n (map #(assoc {:parent_id nil} :id %) (repeatedly get-next)))]
+    (flatten (take lev (iterate #(create-children % n) rootn)))))
 
-
-(defn- build-children
-  [l1]
-  (let [l2 (flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l1))
-        l3 (flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l2))
-        l4 (flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l3))
-        l5 (flatten (map (fn [nd] (take 10 (map (fn [id] {:id id :parent_id (:id nd)}) (repeatedly get-next)))) l4))]
-    [l2 l3 l4 l5]))
-
-(defn tree-items
-  []
-  (let [l0 (take 10 (map (fn [id] {:id id :parent_id nil}) (repeatedly get-next)))
-        l1 (take 10 (map (fn [id pnd] {:id id :parent_id (:id pnd)}) (repeatedly get-next) l0))
-        ls (build-children l1)]
-    (flatten [l0 l1 ls])))
-
+;(with-out-str
+;  (time (count (tree-items 5 10))))
+;
 (with-out-str
-  (time (count (tree-items))))
+  (time (count (tree-items-i 4 10))))
 
+(count (tree-items-i 4 10))
+;
+;(with-out-str
+;  (time (count (tree-items 5 10))))
 
-
-
+;(let* [i0 (take 10 (map (fn* [p1__60273#] (assoc {:parent_id nil} :id p1__60273#)) (repeatedly get-next)))
+;       levels (let [i1 (create-children i0 10)
+;                    i2 (create-children i1 10)
+;                    i3 (create-children i2 10)
+;                    i4 (create-children i3 10)]
+;                [i1 i2 i3 i4])]
+;      (flatten [i0 levels]))

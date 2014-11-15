@@ -74,5 +74,15 @@
   (is (= 9 @for-count))
   )
 
+(deftest eval-test
+  (let [x 6
+        y 6]
+    (is (thrown? Exception (eval '(* x y))))))
+
+(deftest eval-test1
+  (is (= 30 (eval '(let [x 5 y 6]
+                     (* x y))))))
+
+
 
 (run-tests)
