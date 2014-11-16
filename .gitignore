@@ -14,3 +14,4 @@ pom.xml.asc
 .project
 .classpath
 /bower_components
+/resources/public/libs

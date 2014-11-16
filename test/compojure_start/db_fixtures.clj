@@ -175,10 +175,10 @@
 ;(with-out-str
 ;  (time (count (tree-items 5 10))))
 ;
-(with-out-str
-  (time (count (tree-items-i 4 10))))
+;(with-out-str
+;  (time (count (tree-items-i 4 10))))
 
-(count (tree-items-i 4 10))
+;(count (tree-items-i 4 10))
 ;
 ;(with-out-str
 ;  (time (count (tree-items 5 10))))
