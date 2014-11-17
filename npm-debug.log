@@ -1,29 +1,127 @@
 0 info it worked if it ends with ok
 1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
 1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
-1 verbose cli   'start' ]
+1 verbose cli   'install',
+1 verbose cli   'fsevents' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.33
 4 verbose node symlink C:\Program Files\nodejs\\node.exe
-5 verbose run-script [ 'prestart', 'start', 'poststart' ]
-6 info prestart compojure-start@1.0.0
-7 info start compojure-start@1.0.0
-8 verbose unsafe-perm in lifecycle true
-9 info compojure-start@1.0.0 Failed to exec start script
-10 error compojure-start@1.0.0 start: `watchify -o js/bundle.js -v -d ./resources/public/js`
-10 error Exit status 8
-11 error Failed at the compojure-start@1.0.0 start script.
-11 error This is most likely a problem with the compojure-start package,
-11 error not with npm itself.
-11 error Tell the author that this fails on your system:
-11 error     watchify -o js/bundle.js -v -d ./resources/public/js
-11 error You can get their info via:
-11 error     npm owner ls compojure-start
-11 error There is likely additional logging output above.
-12 error System Windows_NT 6.1.7601
-13 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "start"
-14 error cwd D:\Documents\GitHub\compojure-start
-15 error node -v v0.10.33
-16 error npm -v 1.4.28
-17 error code ELIFECYCLE
-18 verbose exit [ 1, true ]
+5 warn package.json keymirror@0.1.0 No repository field.
+6 verbose readDependencies using package.json deps
+7 verbose cache add [ 'fsevents', null ]
+8 verbose cache add name=undefined spec="fsevents" args=["fsevents",null]
+9 verbose parsed url { protocol: null,
+9 verbose parsed url   slashes: null,
+9 verbose parsed url   auth: null,
+9 verbose parsed url   host: null,
+9 verbose parsed url   port: null,
+9 verbose parsed url   hostname: null,
+9 verbose parsed url   hash: null,
+9 verbose parsed url   search: null,
+9 verbose parsed url   query: null,
+9 verbose parsed url   pathname: 'fsevents',
+9 verbose parsed url   path: 'fsevents',
+9 verbose parsed url   href: 'fsevents' }
+10 silly lockFile b72a3cea-fsevents fsevents
+11 verbose lock fsevents C:\Users\libo\AppData\Roaming\npm-cache\b72a3cea-fsevents.lock
+12 silly lockFile b72a3cea-fsevents fsevents
+13 silly lockFile b72a3cea-fsevents fsevents
+14 verbose addNamed [ 'fsevents', '' ]
+15 verbose addNamed [ null, '*' ]
+16 silly lockFile 436f77be-fsevents fsevents@
+17 verbose lock fsevents@ C:\Users\libo\AppData\Roaming\npm-cache\436f77be-fsevents.lock
+18 silly addNameRange { name: 'fsevents', range: '*', hasData: false }
+19 verbose request where is /fsevents
+20 verbose request registry https://registry.npmjs.org/
+21 verbose request id 74db79f41055d331
+22 verbose url raw /fsevents
+23 verbose url resolving [ 'https://registry.npmjs.org/', './fsevents' ]
+24 verbose url resolved https://registry.npmjs.org/fsevents
+25 verbose request where is https://registry.npmjs.org/fsevents
+26 info trying registry request attempt 1 at 21:04:50
+27 verbose etag "DAZZMY838M99O896RGVUHRNNT"
+28 http GET https://registry.npmjs.org/fsevents
+29 http 304 https://registry.npmjs.org/fsevents
+30 silly registry.get cb [ 304,
+30 silly registry.get   { date: 'Mon, 17 Nov 2014 13:04:57 GMT',
+30 silly registry.get     server: 'Apache',
+30 silly registry.get     via: '1.1 varnish',
+30 silly registry.get     'last-modified': 'Mon, 17 Nov 2014 13:04:38 GMT',
+30 silly registry.get     'cache-control': 'max-age=60',
+30 silly registry.get     etag: '"DAZZMY838M99O896RGVUHRNNT"',
+30 silly registry.get     age: '52',
+30 silly registry.get     'x-served-by': 'cache-ty68-TYO',
+30 silly registry.get     'x-cache': 'HIT',
+30 silly registry.get     'x-cache-hits': '2',
+30 silly registry.get     'x-timer': 'S1416229497.331638,VS0,VE0',
+30 silly registry.get     vary: 'Accept',
+30 silly registry.get     'content-length': '0',
+30 silly registry.get     'keep-alive': 'timeout=10, max=50',
+30 silly registry.get     connection: 'Keep-Alive' } ]
+31 verbose etag https://registry.npmjs.org/fsevents from cache
+32 silly addNameRange number 2 { name: 'fsevents', range: '*', hasData: true }
+33 silly addNameRange versions [ 'fsevents',
+33 silly addNameRange   [ '0.1.1',
+33 silly addNameRange     '0.1.3',
+33 silly addNameRange     '0.1.4',
+33 silly addNameRange     '0.1.5',
+33 silly addNameRange     '0.1.6',
+33 silly addNameRange     '0.2.0',
+33 silly addNameRange     '0.3.0',
+33 silly addNameRange     '0.3.1' ] ]
+34 verbose addNamed [ 'fsevents', '0.3.1' ]
+35 verbose addNamed [ '0.3.1', '0.3.1' ]
+36 silly lockFile 338caa72-fsevents-0-3-1 fsevents@0.3.1
+37 verbose lock fsevents@0.3.1 C:\Users\libo\AppData\Roaming\npm-cache\338caa72-fsevents-0-3-1.lock
+38 silly lockFile 338caa72-fsevents-0-3-1 fsevents@0.3.1
+39 silly lockFile 338caa72-fsevents-0-3-1 fsevents@0.3.1
+40 silly lockFile 436f77be-fsevents fsevents@
+41 silly lockFile 436f77be-fsevents fsevents@
+42 silly resolved [ { name: 'fsevents',
+42 silly resolved     version: '0.3.1',
+42 silly resolved     description: 'Native Access to Mac OS-X FSEvents',
+42 silly resolved     main: 'fsevents.js',
+42 silly resolved     dependencies: { nan: '~1.3.0' },
+42 silly resolved     os: [ 'darwin' ],
+42 silly resolved     engines: { node: '>=0.8.0' },
+42 silly resolved     scripts:
+42 silly resolved      { install: 'node-gyp rebuild',
+42 silly resolved        test: 'export PATH=$PATH:`pwd`/node_nodules/.bin/ && tap ./test' },
+42 silly resolved     repository:
+42 silly resolved      { type: 'git',
+42 silly resolved        url: 'https://github.com/pipobscure/fsevents.git' },
+42 silly resolved     keywords: [ 'fsevents', 'mac' ],
+42 silly resolved     author: { name: 'Philipp Dunkel', email: 'pip@pipobscure.com' },
+42 silly resolved     license: 'MIT',
+42 silly resolved     gypfile: true,
+42 silly resolved     bugs: { url: 'https://github.com/pipobscure/fsevents/issues' },
+42 silly resolved     homepage: 'https://github.com/pipobscure/fsevents',
+42 silly resolved     devDependencies: { tap: '~0.4.8' },
+42 silly resolved     gitHead: '0db2eec01b94f3d900552893a59d6346ed2e37e1',
+42 silly resolved     _id: 'fsevents@0.3.1',
+42 silly resolved     _shasum: '47d60e5c28887055d7388833ea5d54d4882c8f6f',
+42 silly resolved     _from: 'fsevents@',
+42 silly resolved     _npmVersion: '1.4.28',
+42 silly resolved     _npmUser: { name: 'pipobscure', email: 'pip@pipobscure.com' },
+42 silly resolved     maintainers: [ [Object], [Object] ],
+42 silly resolved     dist:
+42 silly resolved      { shasum: '47d60e5c28887055d7388833ea5d54d4882c8f6f',
+42 silly resolved        tarball: 'http://registry.npmjs.org/fsevents/-/fsevents-0.3.1.tgz' },
+42 silly resolved     directories: {},
+42 silly resolved     _resolved: 'https://registry.npmjs.org/fsevents/-/fsevents-0.3.1.tgz',
+42 silly resolved     readme: 'ERROR: No README data found!' } ]
+43 info install fsevents@0.3.1 into C:\Users\libo\Documents\GitHub\compojure-start
+44 info installOne fsevents@0.3.1
+45 error notsup Unsupported
+45 error notsup Not compatible with your operating system or architecture: fsevents@0.3.1
+45 error notsup Valid OS:    darwin
+45 error notsup Valid Arch:  any
+45 error notsup Actual OS:   win32
+45 error notsup Actual Arch: x64
+46 error System Windows_NT 6.2.9200
+47 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "fsevents"
+48 error cwd C:\Users\libo\Documents\GitHub\compojure-start
+49 error node -v v0.10.33
+50 error npm -v 1.4.28
+51 error code EBADPLATFORM
+52 verbose exit [ 1, true ]

@@ -18,3 +18,4 @@ pom.xml.asc
 /node_modules
 bundle.js
 bundle.min.js
+*.log
