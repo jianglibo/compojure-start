@@ -16,7 +16,7 @@ var server = express();
 expressState.extend(server);
 server.set('state namespace', 'App');
 //server.use(favicon(__dirname + '/../favicon.ico'));
-//server.use('/public', express.static(__dirname + '/build'));
+server.use('/public', express.static(__dirname + '/build'));
 
 server.use(function (req, res, next) {
     var context = app.createContext();
@@ -59,3 +59,5 @@ server.use(function (req, res, next) {
 var port = process.env.PORT || 3000;
 server.listen(port);
 console.log('Listening on port ' + port);
+
+console.log(__dirname);
