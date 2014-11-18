@@ -19,3 +19,5 @@ pom.xml.asc
 bundle.js
 bundle.min.js
 *.log
+npm-debug.log
+resources/public/build
