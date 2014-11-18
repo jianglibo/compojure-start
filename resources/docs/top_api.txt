@@ -1,0 +1,52 @@
+React.createClass
+
+function createClass(object specification)
+
+
+React.render
+
+ReactComponent render(
+  ReactElement element,
+  DOMElement container,
+  [function callback]
+)
+
+
+React.unmountComponentAtNode
+
+boolean unmountComponentAtNode(DOMElement container)
+
+
+React.renderToString
+string renderToString(ReactElement element)
+
+React.renderToStaticMarkup
+string renderToStaticMarkup(ReactElement element)
+
+Similar to renderToString, except this doesn't create extra DOM attributes such as data-react-id, that React uses internally. This is useful if you want to use React as a simple static page generator, as stripping away the extra attributes can save lots of bytes.
+
+React.isValidElement
+boolean isValidElement(* object)
+
+React.DOM
+React.DOM.div(null, 'Hello World!')
+
+React.PropTypes
+
+React.initializeTouchEvents
+initializeTouchEvents(boolean shouldUseTouch)
+
+React.Children
+React.Children.map
+object React.Children.map(object children, function fn [, object context])
+
+React.Children.forEach
+React.Children.forEach(object children, function fn [, object context])
+number React.Children.count(object children)
+
+React.Children.only
+object React.Children.only(object children)
+Return the only child in children. Throws otherwise.
+
+
+React.Children.count

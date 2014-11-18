@@ -1,0 +1,2 @@
+All attributes are camel-cased and the attributes class and for are className and htmlFor, respectively, to match the DOM API specification.
+

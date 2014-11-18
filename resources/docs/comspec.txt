@@ -1,0 +1,30 @@
+When creating a component class by invoking React.createClass(), you should provide a specification object that contains a render method and can optionally contain other lifecycle methods described here.
+
+ReactComponent render()
+
+object getInitialState()
+
+object getDefaultProps()
+
+object propTypes
+
+array mixins
+
+object statics
+
+string displayName
+
+Lifecycle Methods:
+
+componentWillMount()
+
+componentDidMount()
+
+componentWillReceiveProps(object nextProps)
+boolean shouldComponentUpdate(object nextProps, object nextState)
+
+componentWillUpdate(object nextProps, object nextState)
+
+componentDidUpdate(object prevProps, object prevState)
+
+componentWillUnmount()

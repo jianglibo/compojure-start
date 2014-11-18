@@ -1,0 +1,16 @@
+setState
+setState(object nextState[, function callback])
+
+replaceState
+replaceState(object nextState[, function callback])
+
+forceUpdate()
+forceUpdate([function callback])
+
+getDOMNode
+
+isMounted()
+
+setProps
+
+replaceProps

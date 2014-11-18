@@ -7,6 +7,7 @@ var React = require('react');
 var FluxibleApp = require('fluxible-app');
 var routrPlugin = require('fluxible-plugin-routr');
 
+//here not use singleton pattern, but return a factory.
 var app = new FluxibleApp({
     appComponent: React.createFactory(require('./components/Application.jsx'))
 });

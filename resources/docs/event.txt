@@ -1,0 +1,84 @@
+Your event handlers will be passed instances of SyntheticEvent, a cross-browser wrapper around the browser's native event. It has the same interface as the browser's native event, including stopPropagation() and preventDefault(), except the events work identically across all browsers.
+
+If you find that you need the underlying browser event for some reason, simply use the nativeEvent attribute to get it. Every SyntheticEvent object has the following attributes:
+
+Every SyntheticEvent object has the following attributes:
+
+boolean bubbles
+boolean cancelable
+DOMEventTarget currentTarget
+boolean defaultPrevented
+Number eventPhase
+boolean isTrusted
+DOMEvent nativeEvent
+void preventDefault()
+void stopPropagation()
+DOMEventTarget target
+Date timeStamp
+String type
+
+
+onCopy onCut onPaste, DOMDataTransfer clipboardData
+
+
+onKeyDown onKeyPress onKeyUp
+
+boolean altKey
+Number charCode
+boolean ctrlKey
+function getModifierState(key)
+String key
+Number keyCode
+String locale
+Number location
+boolean metaKey
+boolean repeat
+boolean shiftKey
+Number which
+
+onFocus onBlur
+
+DOMEventTarget relatedTarget
+
+onChange onInput onSubmit
+
+onClick onDoubleClick onDrag onDragEnd onDragEnter onDragExit onDragLeave
+onDragOver onDragStart onDrop onMouseDown onMouseEnter onMouseLeave
+onMouseMove onMouseOut onMouseOver onMouseUp
+
+boolean altKey
+Number button
+Number buttons
+Number clientX
+Number clientY
+boolean ctrlKey
+function getModifierState(key)
+boolean metaKey
+Number pageX
+Number pageY
+DOMEventTarget relatedTarget
+Number screenX
+Number screenY
+boolean shiftKey
+
+onTouchCancel onTouchEnd onTouchMove onTouchStart
+
+boolean altKey
+DOMTouchList changedTouches
+boolean ctrlKey
+function getModifierState(key)
+boolean metaKey
+boolean shiftKey
+DOMTouchList targetTouches
+DOMTouchList touches
+
+onScroll
+Number detail
+DOMAbstractView view
+
+onWheel
+
+Number deltaMode
+Number deltaX
+Number deltaY
+Number deltaZ
