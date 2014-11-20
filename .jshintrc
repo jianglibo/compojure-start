@@ -1,0 +1,5 @@
+{
+  "globalstrict": true,
+  "newcap": false,
+  "predef": [ "require", "__dirname", "process", "console" ]
+}

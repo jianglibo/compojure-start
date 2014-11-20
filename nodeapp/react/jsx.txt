@@ -1,1 +1,0 @@
-jsx --watch resources/public/react/src/ resources/public/react/build/
