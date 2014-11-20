@@ -13,9 +13,7 @@ pom.xml.asc
 
 .project
 .classpath
-/bower_components
-/resources/public/libs
-/node_modules
+/nodeapp/node_modules
 bundle.js
 bundle.min.js
 *.log

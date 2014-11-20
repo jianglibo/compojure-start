@@ -2,7 +2,7 @@
   "name": "compojure-start",
   "version": "1.0.0",
   "description": "a compojure application with security system integration.",
-  "main": "resources/public/server.js",
+  "main": "server.js",
   "dependencies": {
     "body-parser": "^1.6.4",
     "debug": "^2.0.0",
@@ -22,7 +22,7 @@
     "webpack": "^1.4.12"
   },
   "scripts": {
-    "dev": "nodemon --ignore build/ -e js resources/public/server & webpack --watch",
+    "dev": "nodemon --ignore build/ -e js server & webpack --watch",
     "build": "webpack"
   },
   "repository": {

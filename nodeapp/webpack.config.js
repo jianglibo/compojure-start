@@ -9,10 +9,10 @@ module.exports = {
     resolve: {
         extensions: ['', '.js', '.jsx']
     },
-  context:  __dirname + "/resources/public",
+//  context:  __dirname + "/resources/public",
     entry: './client.js',
     output: {
-        path: __dirname+'/resources/public/build/js',
+        path: __dirname + '/build/js',
         filename: 'client.js'
     },
     module: {
