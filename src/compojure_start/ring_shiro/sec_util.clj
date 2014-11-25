@@ -18,7 +18,32 @@
            (org.apache.shiro.authz.permission WildcardPermission)
            (org.apache.shiro.authz SimpleAuthorizationInfo)
            (org.apache.shiro.realm AuthorizingRealm)
+           (com.google.common.io BaseEncoding)
+           (org.apache.shiro.crypto AesCipherService)
            (java.util UUID)))
+
+(def cipher-service (doto
+                      (AesCipherService.)
+                      (.setKeySize 128)))
+
+(def key-bytes (-> cipher-service
+                   .generateNewKey
+                   .getEncoded))
+
+(def base64-url (BaseEncoding/base64Url))
+
+(defn encrypt-str
+  [^String raw-str]
+  (let [bts (.getBytes raw-str)
+        btsrc (.encrypt cipher-service bts key-bytes)]
+    (.encode base64-url (.getBytes btsrc))))
+
+(defn descrypt-str
+  [^String base64str]
+  (let [bts (.decode base64-url base64str)
+        btsrc (.decrypt cipher-service bts key-bytes)]
+    (String. (.getBytes btsrc))))
+
 
 (def securitymanager-inited (ref false))
 

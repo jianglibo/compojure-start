@@ -11,8 +11,7 @@
 
 (deftest flatten-t
   (is (= [1 2 3 4] (concat [1 2] [3 4] ())))
-  (is (= [1 2 3 4] (apply concat '([1 2] [3 4] ()))))
-  )
+  (is (= [1 2 3 4] (apply concat '([1 2] [3 4] ())))))
 
 (run-tests)
 

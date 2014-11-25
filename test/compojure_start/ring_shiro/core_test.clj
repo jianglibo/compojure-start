@@ -15,18 +15,18 @@
 (db-util/init)
 (sec-util/init)
 
-(defn before-test
-  []
-  (db-util/destroy-schema)
-  (db-util/create-schema)
-  (db-fixtures/create-sample-group4us 5)
-  (db-fixtures/create-sample-users 5)
-  (db-fixtures/create-sample-roles 5)
-  (db-fixtures/create-sample-permissions 5))
-
-(defn after-test
-  []
-  (db-util/destroy-schema))
+;(defn before-test
+;  []
+;  (db-util/destroy-schema)
+;  (db-util/create-schema)
+;  (db-fixtures/create-sample-group4us 5)
+;  (db-fixtures/create-sample-users 5)
+;  (db-fixtures/create-sample-roles 5)
+;  (db-fixtures/create-sample-permissions 5))
+;
+;(defn after-test
+;  []
+;  (db-util/destroy-schema))
 
 
 (defn fixture [f]
@@ -72,9 +72,11 @@
 ;when comming there is no session, handler create session, when leaving, there must has session.
 (defn csession-handler
   [request]
+  (db-fixtures/create-usera)
   (-> (sec-util/get-subject) (.login (sec-util/login-token
                                       (:username db-fixtures/userh)
                                       (:password db-fixtures/userh))))
+  (db-fixtures/drop-usera)
   {})
 
 (defn- csession-app []
@@ -93,14 +95,14 @@
         new-response ((simple-app) {:cookies {:JSESSIONID sessonId}})]
     (is (not (get-in new-response [:cookies :JSESSIONID])))))
 
-(defn test-ns-hook
-  []
-  (before-test)
-  (sub-eq)
-  (simple-request)
-  (cssesion-request)
-  (keep-session)
-  (after-test))
+;(defn test-ns-hook
+;  []
+;  (before-test)
+;  (sub-eq)
+;  (simple-request)
+;  (cssesion-request)
+;  (keep-session)
+;  (after-test))
 
 (run-tests)
 

@@ -12,6 +12,7 @@
                  [org.clojure/java.jdbc "0.3.5"]
                  [org.apache.shiro/shiro-core "1.2.3"]
                  [org.apache.shiro/shiro-ehcache "1.2.3"]
+                 [com.google.guava/guava "18.0"]
                  [com.mchange/c3p0 "0.9.2.1"]
                  [org.slf4j/slf4j-log4j12 "1.7.7"]
                  [org.clojure/tools.logging "0.3.1"]
@@ -23,6 +24,7 @@
   :plugins [[lein-ring "0.8.13"]]
   :ring {:handler compojure-start.core.handler/app}
   :jvm-opts ^:replace ["-Dnet.sf.ehcache.skipUpdateCheck=true"]
-  :profiles
-  {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
-                        [ring-mock "0.1.5"]]}})
+  :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
+                                  [ring-mock "0.1.5"]
+                                  [midje "1.6.3"]]
+                   :plugins [[lein-midje "3.1.1"]]}})

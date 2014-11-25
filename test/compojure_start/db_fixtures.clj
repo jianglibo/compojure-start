@@ -10,7 +10,7 @@
 
 
 (def userh {:username "un" :nickname "nn" :email "abc@gmail.com" :password "pwd"})
-(def userh1 {:username "un1" :nickname "nna" :email "abc@gmail.com1" :password "pwd"})
+(def userh1 {:username "un1" :nickname "nn1" :email "abc@gmail.com1" :password "pwd1"})
 
 (def rolea "rolea")
 (def groupa "groupa")

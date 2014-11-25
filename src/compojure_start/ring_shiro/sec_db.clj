@@ -108,6 +108,8 @@
     nil))
 
 (defn create-group4u
+  ([gn]
+   (create-group4u (db-util/db-conn) gn nil))
   ([gn parent-id]
    (create-group4u (db-util/db-conn) gn parent-id))
   ([conn gn parent-id]
