@@ -94,6 +94,7 @@
     (dosync
      (ref-set pooled-ds-ref (pool (app-settings/get-setting :db-spec))))))
 
+(init)
 
 ;(jdbc/execute! db-spec ["UPDATE table SET col1 = NOW() WHERE id = ?" 77])
 ;(jdbc/db-do-commands db-spec "CREATE INDEX name_ix ON fruit ( name )")

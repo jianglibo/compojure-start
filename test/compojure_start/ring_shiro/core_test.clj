@@ -11,9 +11,6 @@
 
 (def ^:dynamic *shiro-response*)
 
-(app-settings/init)
-(db-util/init)
-(sec-util/init)
 
 ;(defn before-test
 ;  []
@@ -104,6 +101,5 @@
 ;  (keep-session)
 ;  (after-test))
 
-(run-tests)
 
 ;((csession-app) (sample-request))

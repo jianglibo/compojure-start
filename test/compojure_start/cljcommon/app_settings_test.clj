@@ -5,7 +5,6 @@
              [app-settings :as app-settings]] :reload-all)
   (:import (java.util Date)))
 
-(try (app-settings/init) (catch Exception _))
 
 (deftest b-t
   (binding [app-settings/bingding-test (ref 5)]
@@ -18,4 +17,3 @@
 ;    (alias 'db-schema (symbol dbschema))
 ;    (is (find-ns 'db-schema))))
 
-(run-tests)

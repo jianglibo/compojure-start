@@ -18,4 +18,3 @@
        #"Wrong number of args"
        (hashf :dbpath "dp" :user "us" :password "pw"))))
 
-(run-tests)

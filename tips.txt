@@ -2,3 +2,17 @@ http://www.ember-cli.com/
 lein ring server-headless
 
 install nodemon webpack to global
+
+lein test
+lein test test-ns
+
+lein repl
+(use 'midje.repl)
+(auotest)
+
+(autotest :pause)
+(autotest :resume)
+
+Edit files and reload them manually. Midje provides a shorthand for that:
+(load-facts)
+

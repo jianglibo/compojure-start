@@ -10,8 +10,6 @@
            (org.apache.shiro.subject Subject)
            (org.apache.shiro SecurityUtils)))
 
-(app-settings/init)
-(db-util/init)
 
 (defn fixture [f]
   (db-util/destroy-schema)
@@ -154,4 +152,3 @@
   (db-fixtures/drop-groupa))
 
 
-(run-tests)

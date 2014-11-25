@@ -118,6 +118,7 @@
         (dosync (ref-set securitymanager-inited true)))
       (catch org.apache.shiro.cache.CacheException ce))))
 
+(init)
 
 
 (comment

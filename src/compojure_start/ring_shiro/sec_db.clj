@@ -107,8 +107,17 @@
       (str (or (:gpath parent) ".") (:id parent) "."))
     nil))
 
+;  [& args]
+;  (let [alen (count args)
+;        args1 (cond
+;               (= alen 1) [(db-util/db-conn) (first args) nil]
+;               (= alen 2) [(db-util/db-conn) (first args) (second args)]
+;               :else args)
+;        [conn gn parent-id] args1]
+;    (map :id
+;         (j/insert! conn :group4u {:name gn :parent_id parent-id :gpath (get-gpath parent-id)}))))
 (defn create-group4u
-  ([gn]
+ ([gn]
    (create-group4u (db-util/db-conn) gn nil))
   ([gn parent-id]
    (create-group4u (db-util/db-conn) gn parent-id))

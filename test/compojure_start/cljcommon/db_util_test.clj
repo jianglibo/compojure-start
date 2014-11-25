@@ -7,9 +7,6 @@
              [db-util :as db-util]] :reload-all)
   (:import (java.util Date)))
 
-(app-settings/init)
-(db-util/init)
-
 (def userh {:username "un" :nickname "nn" :email "abc@gmail.com" :password "pwd" :password_salt "salt"})
 (def userh1 {:username "un1" :nickname "nn" :email "abc1@gmail.com" :password "pwd" :password_salt "salt"})
 
@@ -127,6 +124,5 @@
   (is (= "(1,2)" (db-util/in-clause [1 2])))
   (is (= "('1','2')" (db-util/in-clause ["1" "2"]))))
 
-(run-tests)
 
 

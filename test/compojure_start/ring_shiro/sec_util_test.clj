@@ -10,11 +10,6 @@
            (org.apache.shiro.subject Subject)
            (org.apache.shiro SecurityUtils)))
 
-(app-settings/init)
-(db-util/init)
-(sec-util/init)
-
-
 (deftest security-mgr
   (let [smgr (SecurityUtils/getSecurityManager)
             sessmgr (.getSessionManager smgr)
@@ -26,7 +21,6 @@
          (is (= (type camgr) org.apache.shiro.cache.ehcache.EhCacheManager))))
 
 
-(run-tests)
 
 ;CROSS TABLE Cartesian product
 ;(A) CROSS JOIN (B) => SELECT * FROM A,B

@@ -46,6 +46,8 @@
        (dosync
         (ref-set db-schema (read-db-schema)))))))
 
+(init)
+
 (defn get-db-schema
   []
   @db-schema)
