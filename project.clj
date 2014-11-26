@@ -19,6 +19,9 @@
                  [environ "1.0.0"]
                  [org.clojure/math.numeric-tower "0.0.4"]
                  [org.hsqldb/hsqldb "2.3.2"]
+                 [liberator "0.12.2"]
+                 [ring/ring-jetty-adapter "1.1.0"]
+                 [clj-http "1.0.1"]
                  [ring/ring-defaults "0.1.2"]]
   :target-path "target/%s"
   :plugins [[lein-ring "0.8.13"]]
