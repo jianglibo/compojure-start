@@ -51,3 +51,13 @@
         (let [ress (vals (dissoc @result-atom :thread-ids)) ]
           (doseq [r ress]
             (count r) => 100 ))))
+
+(fact "unreachable urls, {:len 0, :request-time 0, :status -1}"
+      (let [unurl "http://172.19.223.223"
+            unr {:len 0, :request-time 0, :status -1}
+            urls ["http://www.baidu.com" unurl]
+            result-atom (pressure-util/benchmark [nil urls 2 1])]
+        (count @result-atom) => 3
+        (count (:thread-ids @result-atom)) => 2
+        (@result-atom unurl) => (repeat 2 unr)))
+

@@ -1,6 +1,7 @@
 (ns compojure-start.dutil.pressure-util
   (:require [clojure.tools.logging :as log]
             [clojure.string :as cstr]
+            [clojure.pprint :as pprint]
             [clj-http.client :as client])
   (:import (java.util.concurrent Executors)))
 
@@ -15,9 +16,7 @@
               (count (:body newres)))
         status (:status newres)
         request-time (:request-time newres)]
-;    (log/info "len:" len)
-;    (log/info "status type:" (type status))
-;    (log/info "request-time type:" (type request-time))
+;    (log/info "len:" len) (log/info "status type:" (type status)) (log/info "request-time type:" (type request-time))
     (swap! result-atom (fn [av r]
                          (let [len (count (av url))]
                            (assoc-in av [url len] r)))
@@ -32,7 +31,11 @@
   (let [nurls (map #(cstr/replace % "{{rand}}" (random-str 8)) urls)]
     (doall
      (map (fn [nurl url]
-            (save-response result-atom (client/get nurl {:cookie-store cs}) url))
+            (save-response result-atom (try (client/get nurl {:cookie-store cs :socket-timeout 3000 :conn-timeout 3000})
+                                         (catch Exception e (condp re-find (.getMessage e)
+                                                              #"time out" {:status -100 :request-time 0}
+                                                              {:status -1 :request-time 0}
+                                                              ))) url))
             nurls urls))))
 
 (defn report-result
@@ -88,7 +91,7 @@
         futures (map #(future-call (partial do-requests result-atom (last %) (second %) (% 3))) users)]
     (doall futures)
     (doall (map deref futures))
-    (log/info @result-atom)
+    (log/info (with-out-str (pprint/pprint @result-atom)))
     (log/info "total time costs: " (- (System/currentTimeMillis) starttime))
     result-atom))
 
@@ -108,6 +111,7 @@
                                           :SaveOptions 1
                                           :$PublicAccess 1}
                             :cookie-store cs})))
+
 (def oa-user-request-urls
   ["http://oa.fh.gov.cn/jwoa4share/jwoa4system/db_printview.nsf/PeoplePrintView?OpenAgent&infoid=mqhb_Info&path=jwoa4share/jwoa4app&dbname=db_mqhb.nsf"
    "http://oa.fh.gov.cn/jwoa4share/jwoa4app/db_mqhb.nsf/TopBottomFrameSetWin?OpenForm&path=jwoa4share/jwoa4app/db_mqhb.nsf&fTitle=%E6%B0%91%E6%83%85%E4%BC%9A%E5%8A%9E&RndStr={{rand}}"
