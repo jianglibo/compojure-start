@@ -234,3 +234,18 @@
         permu (permissions<-user user-id)
         permr (permissions<-role rids)]
     (set (concat permu permr))))
+
+(defn get-users
+  [& {:keys [group-id email-like order-by p pp :or {p 1 pp 10 order-by "-created_at"}]}]
+  (let [orby (if (= "-" (subs order-by 0 1))
+               [(subs order-by 1) "DESC"]
+               [order-by "ASC"])
+        pi (if (number? p)
+             p
+             (Integer/valueOf p))
+        ppi (if (number? pp)
+              pp
+              (Integer/valueOf pp))
+        offset (* ppi (dec pi))
+        sql (format "SELECT * FROM user ORDER BY ? %s LIMIT ? OFFSET ?" (first orby))]
+    (j/query (db-util/db-conn) [sql (last orby) ppi offset])))

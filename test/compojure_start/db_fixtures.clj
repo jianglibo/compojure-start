@@ -4,6 +4,7 @@
              [db-util :as db-util]]
             [compojure-start.ring-shiro.sec-db :as sec-db]
             [clojure.zip :as z]
+            [clojure.java.jdbc :as j]
             [clojure.set :as cset]
             [clojure.template :as template]
             [clojure.java.jdbc :as j] :reload-all))
@@ -28,6 +29,10 @@
          (with-out-str
            (time (doseq [u (take 1000 (repeatedly ramuserh))]
                    (:username u)))))
+
+(defn remove-all-user
+  []
+  (j/delete! (db-util/db-conn) :user))
 
 (defn create-usera
   []
