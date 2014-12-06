@@ -12,13 +12,18 @@
            (org.apache.shiro SecurityUtils)))
 
 
-(background (before :contents (do (db-util/destroy-schema) (db-util/create-schema)))
-            (after :contents (db-util/destroy-schema)))
+(background [(before :contents (do
+                                (println "here1")
+                                (db-util/destroy-schema)
+                                (println "here2")
+                                (db-util/create-schema)))
+            (after :contents (do (println "here3") (db-util/destroy-schema)))]
 
 (fact "group4u tree"
       (let [ids (db-fixtures/create-group-tree)
             [a1 b1 c1 d1 e1] ids
             [a b c d e] (map #(sec-db/find-by :group4u :id %) ids)]
+        (println "here4")
         (:parent_id a) => falsey
         (:gpath a) => falsey
         (:parent_id b) => a1
@@ -28,14 +33,14 @@
         (db-fixtures/drop-group-tree)))
 
 
-(deftest group4u-tree1
-  (let [ids (db-fixtures/create-group-tree)
-        [a b c d e] ids]
-  (is (thrown-with-msg?
-       Throwable
-       #"10405"
-       (sec-db/drop-group4u d)))
-  (db-fixtures/drop-group-tree)))
+;(deftest group4u-tree1
+;  (let [ids (db-fixtures/create-group-tree)
+;        [a b c d e] ids]
+;  (is (thrown-with-msg?
+;       Throwable
+;       #"10405"
+;       (sec-db/drop-group4u d)))
+;  (db-fixtures/drop-group-tree)))
 
 (fact "group4u tree get children"
       (let [ids (db-fixtures/create-group-tree)
@@ -129,3 +134,4 @@
          (count (sec-db/allpermissions<-user  user-id)) => 8)))
 
 
+)
