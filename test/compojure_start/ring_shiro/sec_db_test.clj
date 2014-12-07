@@ -12,18 +12,16 @@
            (org.apache.shiro SecurityUtils)))
 
 
-(background [(before :contents (do
-                                (println "here1")
-                                (db-util/destroy-schema)
-                                (println "here2")
-                                (db-util/create-schema)))
-            (after :contents (do (println "here3") (db-util/destroy-schema)))]
+(against-background
+ [(before :contents (do
+                      (db-util/destroy-schema)
+                      (db-util/create-schema)))
+  (after :contents (db-util/destroy-schema))]
 
 (fact "group4u tree"
       (let [ids (db-fixtures/create-group-tree)
             [a1 b1 c1 d1 e1] ids
             [a b c d e] (map #(sec-db/find-by :group4u :id %) ids)]
-        (println "here4")
         (:parent_id a) => falsey
         (:gpath a) => falsey
         (:parent_id b) => a1
@@ -32,15 +30,14 @@
         (:gpath c) => (str "." (clojure.string/join "." [a1 b1]) ".")
         (db-fixtures/drop-group-tree)))
 
-
-;(deftest group4u-tree1
-;  (let [ids (db-fixtures/create-group-tree)
-;        [a b c d e] ids]
-;  (is (thrown-with-msg?
-;       Throwable
-;       #"10405"
-;       (sec-db/drop-group4u d)))
-;  (db-fixtures/drop-group-tree)))
+(fact "cannot delete group4u when has members"
+  (let [ids (db-fixtures/create-group-tree)
+        [a b c d e] ids]
+  (is (thrown-with-msg?
+       Throwable
+       #"10405"
+       (sec-db/drop-group4u d)))
+  (db-fixtures/drop-group-tree)))
 
 (fact "group4u tree get children"
       (let [ids (db-fixtures/create-group-tree)
@@ -48,7 +45,7 @@
             tops (sec-db/get-children :group4u nil)
             acs (sec-db/get-children :group4u a)]
         ;plus pre added 5 samples.
-        (count tops) => 6
+        (count tops) => 1
         (count (filter #(= (:id %) a) tops)) => 1
         (count acs) => 1
         (:id (first acs)) => b
@@ -70,8 +67,8 @@
 
 (fact "get salted pair"
       (let [pair (sec-db/get-salted-pair "abc")]
-        (pair 0) => truthly
-        (pair 1) => truthly
+        (pair 0) => truthy
+        (pair 1) => truthy
         (count (pair 0)) => 44
         (count (.getBytes (pair 0))) => 44
         (count (pair 1)) => 24))
@@ -80,8 +77,8 @@
   (let [dbres (sec-db/create-user  db-fixtures/userh1)
         uid (first dbres)
         userh (sec-db/find-by :user :id uid)]
-    uid => truthly
-    (:password_salt userh) => truthly))
+    uid => truthy
+    (:password_salt userh) => truthy))
 
 
 (defn- ut [token]
@@ -96,7 +93,7 @@
       (ut "ji123") => :username)
 
 (against-background
- [(before :conntents (db-fixtures/create-groupa))
+ [(before :contents (db-fixtures/create-groupa))
   (after :contents (db-fixtures/drop-groupa))]
  (fact "group4u roles"
        (let [group4u (sec-db/find-by :group4u :name "groupa")
@@ -106,8 +103,14 @@
          roles => ())))
 
 (against-background
- [(before :conntents (do (db-fixtures/create-usera) (db-fixtures/create-groupa)))
-  (after :contents (do (db-fixtures/drop-usera) (db-fixtures/drop-groupa)))]
+ [(before :facts (do
+                   (db-fixtures/create-usera)
+                   (db-fixtures/create-groupa)
+                   (db-fixtures/create-sample-roles 5)
+                   (db-fixtures/create-sample-permissions 7)))
+  (after :facts (do
+                  (db-fixtures/drop-usera)
+                  (db-fixtures/drop-groupa)))]
  (fact "assign role"
        (let [user (sec-db/find-by :user :username "un")
              user-id (:id user)
@@ -129,9 +132,8 @@
            (sec-db/role->group4u  rid group4u-id))
          (sec-db/user->group4u  user-id group4u-id)
 
-         (count (sec-db/roles<-user  user-id)) => 2
-         (count (sec-db/allroles<-user  user-id)) => 4
-         (count (sec-db/allpermissions<-user  user-id)) => 8)))
-
-
+         user-id => truthy
+         (count (sec-db/roles<-user user-id)) => 2
+         (count (sec-db/allroles<-user user-id)) => 4
+         (count (sec-db/allpermissions<-user user-id)) => 8)))
 )

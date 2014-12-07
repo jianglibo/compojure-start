@@ -78,11 +78,11 @@
 (defn in-clause [ary]
   "generate sql in clause, (1, 2, 3)"
   (if-not ary
-    "()"
+    nil
     (if-not (coll? ary)
       (str "(" ary ")")
       (if (empty? ary)
-        "()"
+        nil
         (if (number? (first ary))
           (str "(" (str/join "," ary) ")")
           (str "(" (str/join "," (map #(str "'" %1 "'") ary)) ")"))))))
