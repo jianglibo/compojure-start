@@ -74,12 +74,17 @@
         (count (pair 1)) => 24))
 
 (fact "create a user"
-  (let [dbres (sec-db/create-user  db-fixtures/userh1)
-        uid (first dbres)
+  (let [uid (sec-db/create-user db-fixtures/userh1)
         userh (sec-db/find-by :user :id uid)]
     uid => truthy
-    (:password_salt userh) => truthy))
+    (:password_salt userh) => truthy
+    (sec-db/drop-user uid)))
 
+(fact "find user by string id"
+  (let [uid (sec-db/create-user  db-fixtures/userh1)
+        userh (sec-db/find-by :user :id uid)]
+    (:password_salt userh) => truthy
+    (sec-db/drop-user uid)))
 
 (defn- ut [token]
   (condp re-matches token
@@ -101,6 +106,9 @@
              roles (sec-db/roles<-group4u  group4u-id)]
          (db-util/in-clause group4u-id) => #"\(\d+\)"
          roles => ())))
+
+(fact "get users"
+      (count (sec-db/get-users)) => 0)
 
 (against-background
  [(before :facts (do

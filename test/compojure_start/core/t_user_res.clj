@@ -4,50 +4,46 @@
             [clojure.data.json :as json]
             [clojure.java.io :as io]
             [clojure.tools.logging :as log]
+            [clojure.pprint :as pprint]
             [midje.sweet :refer :all]
             [ring.mock.request :as mock]
+            [compojure-start.db-fixtures :as db-fixtures]
+            [compojure-start.cljcommon.db-util :as db-util]
             [compojure-start.core.rest-util :as rest-util]
             [compojure-start.core.handler :refer :all]))
 
-(against-background
- [(before :facts (count "abc"))]
- (fact
-  (nil? user-res/user)  => falsey))
+
+(def users-mock-get (mock/request :get "/rest/user"))
+
+(def user-mock-post (let [req (mock/request :post "/rest/user")]
+                      (-> req
+                          (mock/header "content-type" "application/json")
+                          (mock/body (json/write-str db-fixtures/userh)))))
 
 (against-background
- [(around :facts (let [req (mock/request :get "/user/1" {:a 1 :b " ?"})] ?form))]
- (facts "test mock request"
-       (fact "get method"
-             (:uri req) => "/user/1"
-             (:body req) => nil
-             (:query-string req) => "b=+%3F&a=1"
-             (:request-method req) => :get
-             (:headers req) => {"host" "localhost"})))
+ [(before :contents (do
+                      (db-util/destroy-schema)
+                      (db-util/create-schema)
+                      (db-fixtures/create-sample-users 5)))
+  (after :contents (db-util/destroy-schema))]
 
+ (fact "user res exist."
+       user-res/user  => truthy)
 
-(against-background
- [(around :facts (let [req (->
-                             (mock/request :get "/user/1" {:a 1 :b " ?"})
-                             (mock/header "myhead" "myheadvalue"))] ?form))]
- (facts "test mock request"
-       (fact "get method"
-             (:headers req) => {"host" "localhost" "myhead" "myheadvalue"})))
+ (fact "get users"
+       (let [resp (handler-for-test users-mock-get)]
+         (pprint/pprint resp)
+         (coll? resp) => truthy
+         (:status resp) => 200))
 
+ (fact "create user"
+       (let [resp (handler-for-test user-mock-post)]
+         (pprint/pprint resp)
+         (coll? resp) => truthy
+         (get-in resp [:headers "Location"]) => #"/rest/user/\d+$"
+         (:status resp) => 303
+         (let [resp (handler-for-test (mock/request :get (get-in resp [:headers "Location"])))]
+           (pprint/pprint resp)
+           (:status resp) => 200)))
 
-;body-as-string can only read once!!!
-(against-background
- [(around :facts (let [req (->
-                             (mock/request :post "/user")
-                             (mock/body (json/write-str {:a 1 :b " ?"})))
-                       reqbody (:body req)] ?form))]
- (facts "test rest-util post"
-       (fact "post method"
-             (type reqbody) => java.io.ByteArrayInputStream
-             (json/read-str "{\"b\":\" ?\",\"a\":1}") => {"a" 1 "b" " ?"}
-             (rest-util/parse-json {:request req} :data-key) => [false {:data-key {"a" 1, "b" " ?"}}])))
-
-
-(against-background
- [(before :content (db-fixtures/create-sample-users 5))
-  (after :content (db-util/destroy-schema))]
  )

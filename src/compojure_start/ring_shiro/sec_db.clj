@@ -57,8 +57,7 @@
          rawpwd (pwdkey userh)
          [saltedpwd salt] (get-salted-pair rawpwd)
          userh (-> userh (assoc pwdkey saltedpwd) (assoc saltkey salt))]
-     (map :id
-          (j/insert! db-conn :user userh)))))
+     (:id (first (j/insert! db-conn :user userh))))))
 
 (defn drop-user
   ([user-id]
@@ -231,7 +230,7 @@
     (set (concat permu permr))))
 
 (defn get-users
-  [& {:keys [group-id email-like order-by p pp :or {p 1 pp 10 order-by "-created_at"}]}]
+  [& {:keys [group-id email-like order-by p pp] :or {p 1 pp 10 order-by "-created_at"}}]
   (let [orby (if (= "-" (subs order-by 0 1))
                [(subs order-by 1) "DESC"]
                [order-by "ASC"])
@@ -242,5 +241,5 @@
               pp
               (Integer/valueOf pp))
         offset (* ppi (dec pi))
-        sql (format "SELECT * FROM user ORDER BY ? %s LIMIT ? OFFSET ?" (first orby))]
-    (j/query (db-util/db-conn) [sql (last orby) ppi offset])))
+        sql (format "SELECT * FROM user ORDER BY %s %s LIMIT ? OFFSET ?" (first orby) (last orby))]
+    (j/query (db-util/db-conn) [sql ppi offset])))

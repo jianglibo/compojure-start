@@ -71,11 +71,11 @@
          (vector? ret)
          (integer? (ret 0)))) => truthy)
 
-(fact "not-null-test"
-  (is (thrown-with-msg?
-       java.sql.SQLIntegrityConstraintViolationException
-       #"NOT NULL check constraint"
-       "a")))
+;(fact "not-null-test"
+;  (is (thrown-with-msg?
+;       java.sql.SQLIntegrityConstraintViolationException
+;       #"NOT NULL check constraint"
+;       "a")))
 
 (fact "cannot insert user has no username"
   (is (thrown-with-msg?

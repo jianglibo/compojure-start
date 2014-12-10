@@ -25,7 +25,7 @@
                  [ring/ring-defaults "0.1.2"]]
   :target-path "target/%s"
   :plugins [[lein-ring "0.8.13"]]
-  :ring {:handler compojure-start.core.handler/app}
+  :ring {:handler compojure-start.core.handler/handler}
   :jvm-opts ^:replace ["-Dnet.sf.ehcache.skipUpdateCheck=true"]
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring-mock "0.1.5"]
